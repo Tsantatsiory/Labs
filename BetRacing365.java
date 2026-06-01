@@ -213,7 +213,7 @@ public class BetRacing365 extends JFrame {
             BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
 
-        JLabel lbl = new JLabel("  📊  Sorted Results");
+        JLabel lbl = new JLabel("Sorted Results");
         lbl.setFont(HEADER_FONT);
         lbl.setForeground(ACCENT);
         lbl.setBorder(BorderFactory.createEmptyBorder(0, 0, 6, 0));
