@@ -12,12 +12,12 @@ import javax.swing.table.*;
  */
 public class BetRacing365 extends JFrame {
 
-    // ─── Data ──────────────────────────────────────────────────────────────────
+    // Data 
     private String[] horses  = new String[10];
     private String[] jockeys = new String[10];
     private int[]    numbers = new int[10]; // horse numbers / race positions
 
-    // ─── UI Components ─────────────────────────────────────────────────────────
+    // UI Components 
     private JTextField[] horseFields  = new JTextField[10];
     private JTextField[] jockeyFields = new JTextField[10];
     private JTextField[] numberFields = new JTextField[10];
@@ -31,26 +31,26 @@ public class BetRacing365 extends JFrame {
     private JButton sortNumAscBtn, sortNumDescBtn;
     private JButton loadBtn, clearBtn, randomBtn;
 
-    // ─── Colors / Fonts ────────────────────────────────────────────────────────
-    private static final Color BG_DARK    = new Color(15, 20, 35);
-    private static final Color BG_PANEL   = new Color(25, 32, 55);
-    private static final Color BG_INPUT   = new Color(35, 45, 70);
-    private static final Color ACCENT     = new Color(212, 175, 55);   // gold
-    private static final Color ACCENT2    = new Color(180, 60, 60);    // red
-    private static final Color TEXT_LIGHT = new Color(230, 225, 210);
-    private static final Color TEXT_DIM   = new Color(140, 135, 120);
-    private static final Color BORDER_COL = new Color(70, 80, 110);
+    // Colors / Fonts 
+    private static final Color BG_DARK    = new Color(37, 41, 45);
+    private static final Color BG_PANEL   = new Color(37, 41, 45);
+    private static final Color BG_INPUT   = new Color(37, 41, 45);
+    private static final Color ACCENT     = new Color(37, 99, 235);
+    private static final Color ACCENT2    = new Color(239, 68, 68);
+    private static final Color TEXT_LIGHT = new Color(255,255,255);
+    private static final Color TEXT_DIM   = new Color(100, 116, 139);
+    private static final Color BORDER_COL = new Color(226, 232, 240);
 
-    private static final Font TITLE_FONT   = new Font("Georgia", Font.BOLD, 26);
-    private static final Font HEADER_FONT  = new Font("Georgia", Font.BOLD, 14);
+    private static final Font TITLE_FONT   = new Font("Segoe UI", Font.BOLD, 24);
+    private static final Font HEADER_FONT  = new Font("Segoe UI", Font.BOLD, 16);
     private static final Font LABEL_FONT   = new Font("Segoe UI", Font.PLAIN, 12);
     private static final Font INPUT_FONT   = new Font("Segoe UI", Font.PLAIN, 13);
-    private static final Font BUTTON_FONT  = new Font("Georgia", Font.BOLD, 12);
+    private static final Font BUTTON_FONT  = new Font("Segoe UI", Font.BOLD, 13);
     private static final Font STATUS_FONT  = new Font("Segoe UI", Font.ITALIC, 12);
 
-    // ─── Constructor ───────────────────────────────────────────────────────────
+    // Constructor
     public BetRacing365() {
-        super("🏇  BET RACING 365  —  DSA Sorting App");
+        super("BetRacing365 - Sorting Management System");
         initData();
         buildUI();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,7 +60,7 @@ public class BetRacing365 extends JFrame {
         setVisible(true);
     }
 
-    // ─── Init default data ─────────────────────────────────────────────────────
+    // Init default data 
     private void initData() {
         for (int i = 0; i < 10; i++) {
             horses[i]  = "";
@@ -69,9 +69,7 @@ public class BetRacing365 extends JFrame {
         }
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════
     //  UI CONSTRUCTION
-    // ═══════════════════════════════════════════════════════════════════════════
     private void buildUI() {
         JPanel root = new JPanel(new BorderLayout(0, 0));
         root.setBackground(BG_DARK);
@@ -83,18 +81,18 @@ public class BetRacing365 extends JFrame {
         setContentPane(root);
     }
 
-    // ─── Header ───────────────────────────────────────────────────────────────
+    // Header
     private JPanel buildHeader() {
         JPanel hdr = new JPanel(new BorderLayout());
         hdr.setBackground(BG_PANEL);
         hdr.setBorder(new MatteBorder(0, 0, 2, 0, ACCENT));
 
-        JLabel title = new JLabel("  🏇  BET RACING 365", SwingConstants.LEFT);
+        JLabel title = new JLabel("  BetRacing365", SwingConstants.LEFT);
         title.setFont(TITLE_FONT);
         title.setForeground(ACCENT);
         title.setBorder(BorderFactory.createEmptyBorder(14, 20, 14, 0));
 
-        JLabel sub = new JLabel("DSA Assignment 1 — Merge Sort  ", SwingConstants.RIGHT);
+        JLabel sub = new JLabel("Horse & Jockey Sorting Management System  ", SwingConstants.RIGHT);
         sub.setFont(LABEL_FONT);
         sub.setForeground(TEXT_DIM);
         sub.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
@@ -104,7 +102,7 @@ public class BetRacing365 extends JFrame {
         return hdr;
     }
 
-    // ─── Center split: input left, results right ───────────────────────────────
+    // Center split: input left, results right
     private JPanel buildCenter() {
         JPanel center = new JPanel(new GridLayout(1, 2, 10, 0));
         center.setBackground(BG_DARK);
@@ -115,7 +113,7 @@ public class BetRacing365 extends JFrame {
         return center;
     }
 
-    // ─── Input Panel ──────────────────────────────────────────────────────────
+    // Input Panel 
     private JPanel buildInputPanel() {
         JPanel panel = new JPanel(new BorderLayout(0, 8));
         panel.setBackground(BG_PANEL);
@@ -125,7 +123,7 @@ public class BetRacing365 extends JFrame {
         ));
 
         // Title
-        JLabel lbl = new JLabel("  ✏  Enter Horses & Jockeys");
+        JLabel lbl = new JLabel("  Enter Horses & Jockeys");
         lbl.setFont(HEADER_FONT);
         lbl.setForeground(ACCENT);
         lbl.setBorder(BorderFactory.createEmptyBorder(0, 0, 6, 0));
@@ -189,9 +187,9 @@ public class BetRacing365 extends JFrame {
         p.setBackground(BG_PANEL);
         p.setBorder(BorderFactory.createEmptyBorder(8, 0, 0, 0));
 
-        loadBtn   = makeBtn("▶  Load & Display",   ACCENT,  BG_DARK);
-        randomBtn = makeBtn("🎲  Random Fill",      new Color(70,140,200), BG_DARK);
-        clearBtn  = makeBtn("✕  Clear All",         ACCENT2, BG_DARK);
+        loadBtn   = makeBtn("Load Data",   ACCENT,  BG_DARK);
+        randomBtn = makeBtn("Generate Sample Data",      new Color(70,140,200), BG_DARK);
+        clearBtn  = makeBtn("Clear Data",         ACCENT2, BG_DARK);
 
         loadBtn.addActionListener(e -> loadData());
         randomBtn.addActionListener(e -> fillRandom());
@@ -204,7 +202,7 @@ public class BetRacing365 extends JFrame {
         return p;
     }
 
-    // ─── Output Panel ─────────────────────────────────────────────────────────
+    // Output Panel
     private JPanel buildOutputPanel() {
         JPanel panel = new JPanel(new BorderLayout(0, 8));
         panel.setBackground(BG_PANEL);
@@ -244,12 +242,12 @@ public class BetRacing365 extends JFrame {
         p.setBackground(BG_PANEL);
         p.setBorder(BorderFactory.createEmptyBorder(8, 0, 0, 0));
 
-        sortHorseAscBtn  = makeBtn("🐎  Horse ▲ Asc",   new Color(60,150,100), BG_DARK);
-        sortHorseDescBtn = makeBtn("🐎  Horse ▼ Desc",  new Color(60,150,100), BG_DARK);
-        sortJockeyAscBtn = makeBtn("👤  Jockey ▲ Asc",  new Color(80,120,190), BG_DARK);
-        sortJockeyDescBtn= makeBtn("👤  Jockey ▼ Desc", new Color(80,120,190), BG_DARK);
-        sortNumAscBtn    = makeBtn("#  Number ▲ Asc",   new Color(140,90,190), BG_DARK);
-        sortNumDescBtn   = makeBtn("#  Number ▼ Desc",  new Color(140,90,190), BG_DARK);
+        sortHorseAscBtn  = makeBtn("Sort Horse A-Z",   new Color(60,150,100), BG_DARK);
+        sortHorseDescBtn = makeBtn("Sort Horse Z-A",  new Color(60,150,100), BG_DARK);
+        sortJockeyAscBtn = makeBtn("Sort Jockey A-Z",  new Color(80,120,190), BG_DARK);
+        sortJockeyDescBtn= makeBtn("Sort Jockey Z-A", new Color(80,120,190), BG_DARK);
+        sortNumAscBtn    = makeBtn("Sort Number Asc",   new Color(140,90,190), BG_DARK);
+        sortNumDescBtn   = makeBtn("Sort Number Desc",  new Color(140,90,190), BG_DARK);
 
         sortHorseAscBtn.addActionListener(e  -> sortAndDisplay("HORSE",  true));
         sortHorseDescBtn.addActionListener(e -> sortAndDisplay("HORSE",  false));
@@ -264,7 +262,7 @@ public class BetRacing365 extends JFrame {
         return p;
     }
 
-    // ─── Status bar ───────────────────────────────────────────────────────────
+    // Status bar
     private JPanel buildStatusBar() {
         JPanel bar = new JPanel(new BorderLayout());
         bar.setBackground(new Color(10, 14, 25));
@@ -285,9 +283,7 @@ public class BetRacing365 extends JFrame {
         return bar;
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════
     //  STYLING HELPERS
-    // ═══════════════════════════════════════════════════════════════════════════
     private void styleField(JTextField f) {
         f.setFont(INPUT_FONT);
         f.setBackground(BG_INPUT);
@@ -362,9 +358,7 @@ public class BetRacing365 extends JFrame {
         resultTable.getColumnModel().getColumn(0).setMaxWidth(50);
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════
     //  ACTIONS
-    // ═══════════════════════════════════════════════════════════════════════════
 
     /** Read fields → internal arrays → refresh table */
     private void loadData() {
@@ -415,9 +409,7 @@ public class BetRacing365 extends JFrame {
         setStatus("🎲  Random horses & jockeys filled and loaded.");
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════
     //  SORTING
-    // ═══════════════════════════════════════════════════════════════════════════
 
     /**
      * Sort arrays using Merge Sort on the chosen key,
@@ -442,7 +434,7 @@ public class BetRacing365 extends JFrame {
         setStatus("✔  Sorted by " + field + " — " + dir + "  (Merge Sort)");
     }
 
-    // ─── Merge Sort ───────────────────────────────────────────────────────────
+    // Merge Sort implementation that sorts based on the specified key while keeping all arrays in sync
     private void mergeSort(String[] h, String[] j, int[] n,
                             int left, int right, String key, boolean asc) {
         if (left >= right) return;
@@ -493,7 +485,7 @@ public class BetRacing365 extends JFrame {
         }
     }
 
-    // ─── Table refresh (unsorted) ─────────────────────────────────────────────
+    // Table refresh (unsorted) after loading new data
     private void refreshTable() {
         tableModel.setRowCount(0);
         for (int i = 0; i < 10; i++) {
@@ -505,9 +497,7 @@ public class BetRacing365 extends JFrame {
         statusLabel.setText("  " + msg);
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════
     //  MAIN
-    // ═══════════════════════════════════════════════════════════════════════════
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
