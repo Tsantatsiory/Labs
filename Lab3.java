@@ -1,22 +1,17 @@
-// ═══════════════════════════════════════════════════════════
-// Lab 3 – Stack and Queue  (dynamic + static)
-// Single file: one public class + package-private classes
-// ═══════════════════════════════════════════════════════════
+import java.util.Scanner;
 
-// ─── Node ───────────────────────────────────────────────────
 class Node<T> {
     T data;
     Node<T> next;
     Node(T data) { this.data = data; this.next = null; }
 }
 
-// ─── Dynamic Stack (LIFO) ────────────────────────────────────
-class Stack<T> {
+class MyStack<T> {
     private Node<T> top;
     private int size;
 
     public boolean isEmpty() { return top == null; }
-    public boolean isFull()  { return false; } // dynamic: never full
+    public boolean isFull()  { return false; }
 
     public void push(T data) {
         Node<T> n = new Node<>(data);
@@ -37,6 +32,7 @@ class Stack<T> {
 
     @Override
     public String toString() {
+        if (isEmpty()) return "TOP [ empty ] BOTTOM";
         StringBuilder sb = new StringBuilder("TOP [ ");
         for (Node<T> c = top; c != null; c = c.next)
             sb.append(c.data).append(c.next != null ? " -> " : "");
@@ -44,15 +40,13 @@ class Stack<T> {
     }
 }
 
-// ─── Dynamic Queue (FIFO) ────────────────────────────────────
-class Queue<T> {
+class MyQueue<T> {
     private Node<T> front, rear;
     private int size;
 
     public boolean isEmpty() { return front == null; }
-    public boolean isFull()  { return false; } // dynamic: never full
+    public boolean isFull()  { return false; }
 
-    /** Adds an element at the rear (EnQueue / AddQueue / InsertQueue). */
     public void enQueue(T data) {
         Node<T> n = new Node<>(data);
         if (isEmpty()) { front = rear = n; }
@@ -60,15 +54,13 @@ class Queue<T> {
         size++;
     }
 
-    /** Removes the element at the front (DeQueue / RemoveQueue / DeleteQueue). */
     public T deQueue() {
         if (isEmpty()) throw new RuntimeException("Queue underflow: queue is empty");
         T v = front.data; front = front.next;
-        if (front == null) rear = null; // queue is now empty
+        if (front == null) rear = null;
         size--; return v;
     }
 
-    /** Returns the front element without removing it (Peek). */
     public T peek() {
         if (isEmpty()) throw new RuntimeException("Queue is empty");
         return front.data;
@@ -78,6 +70,7 @@ class Queue<T> {
 
     @Override
     public String toString() {
+        if (isEmpty()) return "FRONT [ empty ] REAR";
         StringBuilder sb = new StringBuilder("FRONT [ ");
         for (Node<T> c = front; c != null; c = c.next)
             sb.append(c.data).append(c.next != null ? " -> " : "");
@@ -85,143 +78,157 @@ class Queue<T> {
     }
 }
 
-// ─── Static Stack (array) ────────────────────────────────────
-class StaticStack<T> {
-    private final T[] data;
-    private int top = -1;           // -1 means the stack is empty
-    private final int capacity;
-
-    @SuppressWarnings("unchecked")
-    StaticStack(int capacity) {
-        this.capacity = capacity;
-        data = (T[]) new Object[capacity];
-    }
-
-    /** EmptyStack / IsEmpty */
-    public boolean isEmpty() { return top == -1; }
-
-    /** FullStack / IsFull */
-    public boolean isFull()  { return top == capacity - 1; }
-
-    /** Adds an element to the top (Push). */
-    public void push(T item) {
-        if (isFull()) throw new RuntimeException("Stack overflow: stack is full");
-        data[++top] = item;
-    }
-
-    /** Removes and returns the top element (Pop). */
-    public T pop() {
-        if (isEmpty()) throw new RuntimeException("Stack underflow: stack is empty");
-        T v = data[top]; data[top--] = null; // help the GC
-        return v;
-    }
-
-    /** Returns the top element without removing it (Peek). */
-    public T peek() {
-        if (isEmpty()) throw new RuntimeException("Stack is empty");
-        return data[top];
-    }
-
-    public int size() { return top + 1; }
-
-    @Override
-    public String toString() {
-        if (isEmpty()) return "[ empty ]";
-        StringBuilder sb = new StringBuilder("TOP [ ");
-        for (int i = top; i >= 0; i--)
-            sb.append(data[i]).append(i > 0 ? " -> " : "");
-        return sb.append(" ] BOTTOM").toString();
-    }
-}
-
-// ─── Static Queue (circular array) ──────────────────────────
-class StaticQueue<T> {
-    private final T[] data;
-    private int front = 0, rear = 0, size = 0;
-    private final int capacity;
-
-    @SuppressWarnings("unchecked")
-    StaticQueue(int capacity) {
-        this.capacity = capacity;
-        data = (T[]) new Object[capacity];
-    }
-
-    /** EmptyQueue / IsEmpty */
-    public boolean isEmpty() { return size == 0; }
-
-    /** FullQueue / IsFull */
-    public boolean isFull()  { return size == capacity; }
-
-    /** Adds an element at the rear (EnQueue / AddQueue / InsertQueue). */
-    public void enQueue(T item) {
-        if (isFull()) throw new RuntimeException("Queue overflow: queue is full");
-        data[rear] = item;
-        rear = (rear + 1) % capacity; // circular wrap-around
-        size++;
-    }
-
-    /** Removes the element at the front (DeQueue / RemoveQueue / DeleteQueue). */
-    public T deQueue() {
-        if (isEmpty()) throw new RuntimeException("Queue underflow: queue is empty");
-        T v = data[front]; data[front] = null; // help the GC
-        front = (front + 1) % capacity;        // circular wrap-around
-        size--; return v;
-    }
-
-    /** Returns the front element without removing it (Peek). */
-    public T peek() {
-        if (isEmpty()) throw new RuntimeException("Queue is empty");
-        return data[front];
-    }
-
-    public int size() { return size; }
-
-    @Override
-    public String toString() {
-        if (isEmpty()) return "[ empty ]";
-        StringBuilder sb = new StringBuilder("FRONT [ ");
-        for (int i = 0; i < size; i++) {
-            sb.append(data[(front + i) % capacity]);
-            if (i < size - 1) sb.append(" -> ");
-        }
-        return sb.append(" ] REAR").toString();
-    }
-}
-
-// ─── Main class (must match the filename) ───────────────────
 public class Lab3 {
+
+    static Scanner sc = new Scanner(System.in);
+    static MyStack<Integer> stack = new MyStack<>();
+    static MyQueue<Integer> queue = new MyQueue<>();
+
+    static void printMenu() {
+        System.out.println("\n=== Lab 3 Menu ===");
+        System.out.println("--- Stack (LIFO) ---");
+        System.out.println("1. Push");
+        System.out.println("2. Pop");
+        System.out.println("3. Print stack");
+        System.out.println("4. Stack isEmpty / isFull");
+        System.out.println("--- Queue (FIFO) ---");
+        System.out.println("5. Enqueue");
+        System.out.println("6. Dequeue");
+        System.out.println("7. Print queue");
+        System.out.println("8. Queue isEmpty / isFull");
+        System.out.println("--- Demo ---");
+        System.out.println("9. Lecture stack demo (push A,B,C,D)");
+        System.out.println("10. Lecture queue demo");
+        System.out.println("11. Exit");
+        System.out.print("Enter choice: ");
+    }
+
+    static void pause() {
+        System.out.print("\nPress Enter to continue...");
+        sc.nextLine();
+    }
+
+    static int readInt(String prompt) {
+        System.out.print(prompt);
+        while (!sc.hasNextInt()) {
+            sc.next();
+            System.out.print("Enter a valid integer: ");
+        }
+        int val = sc.nextInt();
+        sc.nextLine();
+        return val;
+    }
+
     public static void main(String[] args) {
+        System.out.print("Press Enter to continue...");
+        sc.nextLine();
 
-        System.out.println("=== Dynamic Stack ===");
-        Stack<String> stack = new Stack<>();
-        stack.push("A"); stack.push("B"); stack.push("C"); stack.push("D");
-        System.out.println(stack);                           // TOP [ D -> C -> B -> A ] BOTTOM
-        System.out.println("Pop: " + stack.pop());         // D
-        System.out.println(stack);                           // TOP [ C -> B -> A ] BOTTOM
+        int choice = 0;
 
-        System.out.println("\n=== Dynamic Queue ===");
-        Queue<String> queue = new Queue<>();
-        queue.enQueue("A"); queue.enQueue("B"); queue.enQueue("C");
-        System.out.println(queue);                           // FRONT [ A -> B -> C ] REAR
-        System.out.println("DeQueue: " + queue.deQueue()); // A
-        queue.enQueue("D"); queue.enQueue("E");
-        System.out.println(queue);                           // FRONT [ B -> C -> D -> E ] REAR
+        do {
+            printMenu();
+            while (!sc.hasNextInt()) { sc.next(); }
+            choice = sc.nextInt();
+            sc.nextLine();
 
-        System.out.println("\n=== Static Stack ===");
-        StaticStack<String> ss = new StaticStack<>(5);
-        ss.push("A"); ss.push("B"); ss.push("C"); ss.push("D");
-        System.out.println(ss);                              // TOP [ D -> C -> B -> A ] BOTTOM
-        System.out.println("isFull: " + ss.isFull());      // false (4 out of 5 slots used)
-        System.out.println("Pop: "    + ss.pop());          // D
-        System.out.println(ss);                              // TOP [ C -> B -> A ] BOTTOM
+            switch (choice) {
 
-        System.out.println("\n=== Static Queue ===");
-        StaticQueue<String> sq = new StaticQueue<>(6);
-        sq.enQueue("A"); sq.enQueue("B"); sq.enQueue("C");
-        System.out.println(sq);                              // FRONT [ A -> B -> C ] REAR
-        System.out.println("DeQueue: " + sq.deQueue());    // A
-        sq.enQueue("D"); sq.enQueue("E");
-        System.out.println(sq);                              // FRONT [ B -> C -> D -> E ] REAR
-        System.out.println("isFull: " + sq.isFull());      // false (4 out of 6 slots used)
+                case 1:
+                    int pushVal = readInt("Enter number to push: ");
+                    stack.push(pushVal);
+                    System.out.println("Pushed: " + pushVal);
+                    System.out.println(stack);
+                    pause();
+                    break;
+
+                case 2:
+                    try {
+                        int popped = stack.pop();
+                        System.out.println("Popped: " + popped);
+                        System.out.println(stack);
+                    } catch (RuntimeException e) {
+                        System.out.println("Error: " + e.getMessage());
+                    }
+                    pause();
+                    break;
+
+                case 3:
+                    System.out.println(stack);
+                    pause();
+                    break;
+
+                case 4:
+                    System.out.println("Stack isEmpty: " + stack.isEmpty());
+                    System.out.println("Stack isFull:  " + stack.isFull());
+                    pause();
+                    break;
+
+                case 5:
+                    int enqVal = readInt("Enter number to enqueue: ");
+                    queue.enQueue(enqVal);
+                    System.out.println("Enqueued: " + enqVal);
+                    System.out.println(queue);
+                    pause();
+                    break;
+
+                case 6:
+                    try {
+                        int dequeued = queue.deQueue();
+                        System.out.println("Dequeued: " + dequeued);
+                        System.out.println(queue);
+                    } catch (RuntimeException e) {
+                        System.out.println("Error: " + e.getMessage());
+                    }
+                    pause();
+                    break;
+
+                case 7:
+                    System.out.println(queue);
+                    pause();
+                    break;
+
+                case 8:
+                    System.out.println("Queue isEmpty: " + queue.isEmpty());
+                    System.out.println("Queue isFull:  " + queue.isFull());
+                    pause();
+                    break;
+
+                case 9:
+                    MyStack<String> demoStack = new MyStack<>();
+                    System.out.println("\n-- Lecture stack demo (push A, B, C, D) --");
+                    for (String s : new String[]{"A","B","C","D"}) {
+                        demoStack.push(s);
+                        System.out.println("push(" + s + ") -> " + demoStack);
+                    }
+                    System.out.println("pop()        -> " + demoStack.pop() + " | " + demoStack);
+                    pause();
+                    break;
+
+                case 10:
+                    MyQueue<String> demoQueue = new MyQueue<>();
+                    System.out.println("\n-- Lecture queue demo --");
+                    for (String s : new String[]{"A","B","C"}) {
+                        demoQueue.enQueue(s);
+                        System.out.println("enQueue(" + s + ") -> " + demoQueue);
+                    }
+                    System.out.println("deQueue()    -> " + demoQueue.deQueue() + " | " + demoQueue);
+                    demoQueue.enQueue("D");
+                    demoQueue.enQueue("E");
+                    System.out.println("enQueue(D,E) -> " + demoQueue);
+                    pause();
+                    break;
+
+                case 11:
+                    System.out.println("Exit.");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Try again.");
+                    pause();
+            }
+
+        } while (choice != 11);
+
+        sc.close();
     }
 }
