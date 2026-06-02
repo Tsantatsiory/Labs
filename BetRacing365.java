@@ -6,7 +6,6 @@ import javax.swing.border.*;
 import javax.swing.table.*;
 
 /**
- * BetRacing365 - DSA Assignment 1: Sorting Algorithm
  * Uses Merge Sort algorithm for sorting horses and jockeys.
  * Note: When sorting by horse, the corresponding jockey moves with it, and vice versa.
  */
