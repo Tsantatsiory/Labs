@@ -1,5 +1,7 @@
 import java.util.Scanner;
 
+import teste.Node;
+
 class Node<T> {
     T data;
     Node<T> next;
