@@ -72,7 +72,7 @@ public class CPUScheduling {
         return sc.nextInt();
     }
 
-    // Reads process data from the user. needPriority controls whether the
+    // Reads process data from the user. needPriority controls whether the 
     // priority value is requested (not needed for FCFS / SJF).
     static List<Process> inputProcesses(boolean needPriority) {
         System.out.print("Enter number of processes (N): ");
