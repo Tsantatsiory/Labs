@@ -347,6 +347,28 @@ public class AgendaApp extends JFrame {
         eventDisplay.setCaretPosition(0);
     }
 
+    // NOUVELLE MÉTHODE : Vérifie les conflits d'horaires
+    private boolean hasTimeConflict(LocalDate date, String time, Event excludeEvent) {
+        if (!events.containsKey(date)) {
+            return false;
+        }
+        
+        for (Event existing : events.get(date)) {
+            // Si on modifie un événement, on l'exclut de la vérification
+            if (excludeEvent != null && existing == excludeEvent) {
+                continue;
+            }
+            
+            // Vérifier si les horaires se chevauchent
+            if (existing.time != null && !existing.time.isEmpty() && time != null && !time.isEmpty()) {
+                if (existing.time.equals(time)) {
+                    return true; // Même heure -> conflit
+                }
+            }
+        }
+        return false;
+    }
+
     private void showAddEventDialog() {
         JDialog dialog = new JDialog(this, "Ajouter un événement", true);
         dialog.setLayout(new BorderLayout());
@@ -388,9 +410,22 @@ public class AgendaApp extends JFrame {
                     return;
                 }
 
+                String time = timeField.getText().trim();
+                
+                // VÉRIFICATION DES CONFLITS D'HORAIRES
+                if (hasTimeConflict(date, time, null)) {
+                    JOptionPane.showMessageDialog(dialog, 
+                        "⚠️ CONFLIT D'HORAIRE !\n\n" +
+                        "Un événement existe déjà à " + time + " sur cette date.\n" +
+                        "Veuillez choisir un autre horaire.", 
+                        "Conflit d'horaire", 
+                        JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
                 Event event = new Event();
                 event.title = title;
-                event.time = timeField.getText().trim();
+                event.time = time;
                 event.description = descArea.getText().trim();
                 event.priority = (String) priorityCombo.getSelectedItem();
                 event.color = eventColors[colorIndex % eventColors.length];
@@ -426,7 +461,7 @@ public class AgendaApp extends JFrame {
         List<Event> dayEvents = events.get(selectedDate);
         String[] options = new String[dayEvents.size()];
         for (int i = 0; i < dayEvents.size(); i++) {
-            options[i] = (i+1) + ". " + dayEvents.get(i).title;
+            options[i] = (i+1) + ". " + dayEvents.get(i).title + " (" + dayEvents.get(i).time + ")";
         }
 
         String choice = (String) JOptionPane.showInputDialog(this, "Choisissez l'événement à modifier:", 
@@ -470,8 +505,22 @@ public class AgendaApp extends JFrame {
                     JOptionPane.showMessageDialog(dialog, "Le titre est obligatoire!", "Erreur", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
+                
+                String newTime = timeField.getText().trim();
+                
+                // VÉRIFICATION DES CONFLITS D'HORAIRES (en excluant l'événement en cours de modification)
+                if (hasTimeConflict(selectedDate, newTime, event)) {
+                    JOptionPane.showMessageDialog(dialog, 
+                        "⚠️ CONFLIT D'HORAIRE !\n\n" +
+                        "Un autre événement existe déjà à " + newTime + " sur cette date.\n" +
+                        "Veuillez choisir un autre horaire.", 
+                        "Conflit d'horaire", 
+                        JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                
                 event.title = title;
-                event.time = timeField.getText().trim();
+                event.time = newTime;
                 event.description = descArea.getText().trim();
                 event.priority = (String) priorityCombo.getSelectedItem();
                 saveEvents();
@@ -500,7 +549,7 @@ public class AgendaApp extends JFrame {
         List<Event> dayEvents = events.get(selectedDate);
         String[] options = new String[dayEvents.size()];
         for (int i = 0; i < dayEvents.size(); i++) {
-            options[i] = (i+1) + ". " + dayEvents.get(i).title;
+            options[i] = (i+1) + ". " + dayEvents.get(i).title + " (" + dayEvents.get(i).time + ")";
         }
 
         String choice = (String) JOptionPane.showInputDialog(this, "Choisissez l'événement à supprimer:", 
@@ -644,7 +693,6 @@ public class AgendaApp extends JFrame {
         JFileChooser chooser = new JFileChooser();
         int result = chooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
-            // Implémentation simple - on pourrait parser un fichier texte
             JOptionPane.showMessageDialog(this, "Fonction d'importation (à implémenter)");
         }
     }
